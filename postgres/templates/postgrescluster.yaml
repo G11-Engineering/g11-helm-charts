@@ -1,0 +1,43 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: {{ include "postgres.fullname" . }}
+  labels:
+    {{- include "postgres.labels" . | nindent 4 }}
+  annotations:
+    postgres-operator.crunchydata.com/autoCreateUserSchema: "true"
+spec:
+  image: {{ .Values.postgres.image }}
+  postgresVersion: {{ .Values.postgres.version }}
+
+  users:
+    - name: contentuser
+      databases:
+        - contentdb
+
+  instances:
+    - name: {{ .Values.instances.name }}
+      dataVolumeClaimSpec:
+        accessModes:
+        {{- range .Values.instances.dataVolume.accessModes }}
+        - "{{ . }}"
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.instances.dataVolume.size }}
+
+  backups:
+    pgbackrest:
+      image: {{ .Values.backups.pgbackrest.image }}
+      repos:
+        - name: {{ .Values.backups.pgbackrest.repos.name }}
+          volume:
+            volumeClaimSpec:
+              accessModes:
+              {{- range .Values.backups.pgbackrest.repos.dataVolume.accessModes }}
+              - "{{ . }}"
+              {{- end }}
+              resources:
+                requests:
+                  storage: {{ .Values.backups.pgbackrest.repos.dataVolume.size }}
+

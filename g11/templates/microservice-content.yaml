@@ -44,6 +44,8 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: DATABASE_URL
-          valueFrom: { secretKeyRef: { name: hippo-pguser-hippo, key: uri } }
+          valueFrom: { secretKeyRef: { name: hippo-postgres-pguser-contentuser, key: uri } }
+        - name: NODE_ENV
+          value: 'production'
         ports:
         - containerPort: 3002
