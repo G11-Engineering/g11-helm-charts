@@ -40,7 +40,22 @@ spec:
       serviceAccountName: g11-frontend
       containers:
       - name: frontend
-        image: jasonmishi/g11-frontend-service:latest
-        imagePullPolicy: IfNotPresent
+        image: jasonmishi/g11-frontend-service:v1.0.7
+        imagePullPolicy: Always
+        env:
+        - name: NEXT_PUBLIC_USER_SERVICE_URL
+          value: "http://user:3001"
+        - name: NEXT_PUBLIC_CONTENT_SERVICE_URL
+          value: "http://content:3002"
+        - name: NEXT_PUBLIC_CATEGORY_SERVICE_URL
+          value: "http://category:3004"
+        - name: NEXT_PUBLIC_FRONTEND_HOST
+          value: "localhost"
+        - name: NEXT_PUBLIC_FRONTEND_PORT
+          value: "8080"
+        - name: NEXT_PUBLIC_ASGARDEO_REDIRECT_URL
+          value: "http://localhost:8080"
+        - name: ASGARDEO_REDIRECT_URL
+          value: "http://localhost:8080"
         ports:
         - containerPort: 3000

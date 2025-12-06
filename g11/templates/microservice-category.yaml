@@ -2,50 +2,50 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: content
+  name: category
   labels:
-    app: content
-    service: content
+    app: category
+    service: category
 spec:
   ports:
-  - port: 3002
+  - port: 3004
     name: http
   selector:
-    app: content
+    app: category
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: g11-content
+  name: g11-category
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: content-v1
+  name: category-v1
   labels:
-    app: content
+    app: category
     version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: content
+      app: category
       version: v1
   template:
     metadata:
       labels:
-        app: content
+        app: category
         version: v1
     spec:
-      serviceAccountName: g11-content
+      serviceAccountName: g11-category
       containers:
-      - name: content
-        image: jasonmishi/g11-content-service:latest
+      - name: category
+        image: jasonmishi/g11-category-service:latest
         imagePullPolicy: IfNotPresent
         env:
         - name: DATABASE_URL
-          valueFrom: { secretKeyRef: { name: hippo-postgres-pguser-contentdbuser, key: uri } }
+          valueFrom: { secretKeyRef: { name: hippo-postgres-pguser-categorydbuser, key: uri } }
         - name: NODE_ENV
           value: 'production'
         ports:
-        - containerPort: 3002
+        - containerPort: 3004

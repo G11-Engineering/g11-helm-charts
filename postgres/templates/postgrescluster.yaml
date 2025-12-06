@@ -11,9 +11,15 @@ spec:
   postgresVersion: {{ .Values.postgres.version }}
 
   users:
-    - name: contentuser
+    - name: userdbuser
+      databases:
+        - userdb
+    - name: contentdbuser
       databases:
         - contentdb
+    - name: categorydbuser
+      databases:
+        - categorydb
 
   instances:
     - name: {{ .Values.instances.name }}
