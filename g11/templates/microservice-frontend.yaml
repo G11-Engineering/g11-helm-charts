@@ -52,8 +52,8 @@ spec:
       serviceAccountName: g11-frontend
       containers:
       - name: frontend
-        image: jasonmishi/g11-frontend-service:v1.0.7
-        imagePullPolicy: Always
+        image: {{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}
+        imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
         env:
         - name: NEXT_PUBLIC_USER_SERVICE_URL
           value: "http://user:3001"

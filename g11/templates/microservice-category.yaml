@@ -52,8 +52,8 @@ spec:
       serviceAccountName: g11-category
       containers:
       - name: category
-        image: jasonmishi/g11-category-service:latest
-        imagePullPolicy: IfNotPresent
+        image: {{ .Values.category.image.repository }}:{{ .Values.category.image.tag }}
+        imagePullPolicy: {{ .Values.category.image.pullPolicy }}
         env:
         - name: DATABASE_URL
           valueFrom: { secretKeyRef: { name: hippo-postgres-pguser-categorydbuser, key: uri } }

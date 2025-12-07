@@ -2,6 +2,31 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Microservices image configuration
+frontend:
+  image:
+    repository: jasonmishi/g11-frontend-service
+    tag: v1.0.7
+    pullPolicy: Always
+
+user:
+  image:
+    repository: jasonmishi/g11-user-service
+    tag: latest
+    pullPolicy: IfNotPresent
+
+category:
+  image:
+    repository: jasonmishi/g11-category-service
+    tag: latest
+    pullPolicy: IfNotPresent
+
+content:
+  image:
+    repository: jasonmishi/g11-content-service
+    tag: latest
+    pullPolicy: IfNotPresent
+
 gateway:
   selector: ingressgateway
   hostname: '"*"'

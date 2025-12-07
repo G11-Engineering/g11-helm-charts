@@ -52,8 +52,8 @@ spec:
       serviceAccountName: g11-user
       containers:
       - name: user
-        image: jasonmishi/g11-user-service:latest
-        imagePullPolicy: IfNotPresent
+        image: {{ .Values.user.image.repository }}:{{ .Values.user.image.tag }}
+        imagePullPolicy: {{ .Values.user.image.pullPolicy }}
         env:
         - name: DATABASE_URL
           valueFrom: { secretKeyRef: { name: hippo-postgres-pguser-userdbuser, key: uri } }
