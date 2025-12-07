@@ -27,7 +27,7 @@ spec:
   - name: http-check
     provider:
       web:
-        url: http://content-canary:3002/health
+        url: http://content-canary.{{ .Release.Namespace }}.svc.cluster.local:3002/health
         timeoutSeconds: 5
     successCondition: result.statusCode == 200
     failureLimit: 2
@@ -80,13 +80,11 @@ spec:
       - analysis:
           templates:
           - templateName: content-health-check
-      - setWeight: 25
+      - setWeight: 20
       - pause: {duration: 30s}
       - analysis:
           templates:
           - templateName: content-health-check
-      - setWeight: 80
-      - pause: {duration: 30s}
 ---
 apiVersion: v1
 kind: Service
