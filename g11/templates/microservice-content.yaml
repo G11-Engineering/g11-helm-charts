@@ -59,7 +59,7 @@ spec:
         imagePullPolicy: {{ .Values.content.image.pullPolicy }}
         env:
         - name: DATABASE_URL
-          valueFrom: { secretKeyRef: { name: hippo-postgres-pguser-contentdbuser, key: uri } }
+          valueFrom: { secretKeyRef: { name: {{ .Values.postgres.clusterName }}-pguser-contentdbuser, key: uri } }
         - name: NODE_ENV
           value: 'production'
         ports:

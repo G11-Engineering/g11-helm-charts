@@ -59,21 +59,21 @@ spec:
         imagePullPolicy: {{ .Values.user.image.pullPolicy }}
         env:
         - name: DATABASE_URL
-          valueFrom: { secretKeyRef: { name: hippo-postgres-pguser-userdbuser, key: uri } }
+          valueFrom: { secretKeyRef: { name: {{ .Values.postgres.clusterName }}-pguser-userdbuser, key: uri } }
         - name: NODE_ENV
           value: 'production'
         - name: ASGARDEO_ORG_NAME
-          value: 'g11engineering'
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: asgardeo-org-name } }
         - name: ASGARDEO_CLIENT_ID
-          value: 'Y4Yrhdn2PcIxQRLfWYDdEycYTfUa'
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: asgardeo-client-id } }
         - name: ASGARDEO_CLIENT_SECRET
-          value: ''
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: asgardeo-client-secret } }
         - name: ASGARDEO_M2M_CLIENT_ID
-          value: 'Z4uhhDswzZBUBcJX9caVDFLmys0a'
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: asgardeo-m2m-client-id } }
         - name: ASGARDEO_M2M_CLIENT_SECRET
-          value: 'qYv5fgcnc8_rgfsfgEQvkZh1zVZtmXB9gvYNoAw2pnsa'
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: asgardeo-m2m-client-secret } }
         - name: JWT_SECRET
-          value: 'GIXWveBHeiPDOe9b/c8qAs+wic93EgL9dKw6PVJrwRwDl/4qnywMPvVL/+Yqp3PAb0su6Gxxbb6BpSfjWFjueA=='
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: jwt-secret } }
         ports:
         - containerPort: 3001
   strategy:

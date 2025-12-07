@@ -2,6 +2,26 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# PostgreSQL configuration
+postgres:
+  # The name of the PostgresCluster resource
+  # This should match the Helm release name used when installing the postgres chart
+  clusterName: hippo-postgres
+
+# Application secrets configuration
+# These should be overridden in production using --set or separate values files
+secrets:
+  # JWT secret for user service authentication
+  jwtSecret: ""
+  
+  # Asgardeo OAuth credentials
+  asgardeo:
+    orgName: "g11engineering"
+    clientId: "Y4Yrhdn2PcIxQRLfWYDdEycYTfUa"
+    clientSecret: ""
+    m2mClientId: "Z4uhhDswzZBUBcJX9caVDFLmys0a"
+    m1mClientSecret: ""
+
 # Microservices image configuration
 frontend:
   image:
