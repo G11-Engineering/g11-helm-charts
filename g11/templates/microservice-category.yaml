@@ -29,7 +29,7 @@ spec:
       web:
         url: http://category-canary.{{ .Release.Namespace }}.svc.cluster.local:3004/health
         timeoutSeconds: 5
-    successCondition: result.statusCode == 200
+    successCondition: result.status == "OK"
     failureLimit: 2
     inconclusiveLimit: 2
     interval: 15s
