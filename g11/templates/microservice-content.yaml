@@ -28,7 +28,10 @@ spec:
     provider:
       web:
         url: http://content-canary:3002/health
+        timeoutSeconds: 5
     successCondition: result.statusCode == 200
+    failureLimit: 2
+    inconclusiveLimit: 5
     interval: 15s
     count: 3
 ---
@@ -71,26 +74,13 @@ spec:
           - name: content-internal
             routes:
             - primary
-      analysis:
-        templates:
-        - templateName: content-health-check
       steps:
-      - setWeight: 20
+      - setWeight: 0
       - pause: {duration: 30s}
       - analysis:
           templates:
           - templateName: content-health-check
-      - setWeight: 40
-      - pause: {duration: 30s}
-      - analysis:
-          templates:
-          - templateName: content-health-check
-      - setWeight: 60
-      - pause: {duration: 30s}
-      - analysis:
-          templates:
-          - templateName: content-health-check
-      - setWeight: 80
+      - setWeight: 25
       - pause: {duration: 30s}
       - analysis:
           templates:
