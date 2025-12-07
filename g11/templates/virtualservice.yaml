@@ -9,9 +9,11 @@ spec:
   gateways:
   - g11blog
   http:
-    - route:
-      - destination:
-          host: frontend
-          port:
-            number: 3000
+  - name: primary
+    route:
+    - destination:
+        host: frontend
+        port:
+          number: 3000
+      weight: 100
 

@@ -18,24 +18,22 @@ kind: ServiceAccount
 metadata:
   name: g11-frontend
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
-  name: frontend-v1
+  name: frontend
   labels:
     app: frontend
-    version: v1
 spec:
   replicas: 1
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: frontend
-      version: v1
   template:
     metadata:
       labels:
         app: frontend
-        version: v1
     spec:
       serviceAccountName: g11-frontend
       containers:
@@ -59,3 +57,36 @@ spec:
           value: "http://localhost:8080"
         ports:
         - containerPort: 3000
+  strategy:
+    canary:
+      canaryService: frontend-canary
+      stableService: frontend
+      trafficRouting:
+        istio:
+          virtualService:
+            name: g11blog
+            routes:
+            - primary
+      steps:
+      - setWeight: 20
+      - pause: {duration: 30s}
+      - setWeight: 40
+      - pause: {duration: 30s}
+      - setWeight: 60
+      - pause: {duration: 30s}
+      - setWeight: 80
+      - pause: {duration: 30s}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-canary
+  labels:
+    app: frontend
+    service: frontend
+spec:
+  ports:
+  - port: 3000
+    name: http
+  selector:
+    app: frontend

@@ -18,24 +18,22 @@ kind: ServiceAccount
 metadata:
   name: g11-content
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
-  name: content-v1
+  name: content
   labels:
     app: content
-    version: v1
 spec:
   replicas: 1
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: content
-      version: v1
   template:
     metadata:
       labels:
         app: content
-        version: v1
     spec:
       serviceAccountName: g11-content
       containers:
@@ -49,3 +47,52 @@ spec:
           value: 'production'
         ports:
         - containerPort: 3002
+  strategy:
+    canary:
+      canaryService: content-canary
+      stableService: content
+      trafficRouting:
+        istio:
+          virtualServices:
+          - name: content-internal
+            routes:
+            - primary
+      steps:
+      - setWeight: 20
+      - pause: {duration: 30s}
+      - setWeight: 40
+      - pause: {duration: 30s}
+      - setWeight: 60
+      - pause: {duration: 30s}
+      - setWeight: 80
+      - pause: {duration: 30s}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: content-canary
+  labels:
+    app: content
+    service: content
+spec:
+  ports:
+  - port: 3002
+    name: http
+  selector:
+    app: content
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: content-internal
+spec:
+  hosts:
+  - content
+  http:
+  - name: primary
+    route:
+    - destination:
+        host: content
+        port:
+          number: 3002
+      weight: 100
