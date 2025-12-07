@@ -72,6 +72,8 @@ spec:
           value: 'Z4uhhDswzZBUBcJX9caVDFLmys0a'
         - name: ASGARDEO_M2M_CLIENT_SECRET
           value: 'qYv5fgcnc8_rgfsfgEQvkZh1zVZtmXB9gvYNoAw2pnsa'
+        - name: JWT_SECRET
+          value: 'GIXWveBHeiPDOe9b/c8qAs+wic93EgL9dKw6PVJrwRwDl/4qnywMPvVL/+Yqp3PAb0su6Gxxbb6BpSfjWFjueA=='
         ports:
         - containerPort: 3001
   strategy:
