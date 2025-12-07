@@ -24,7 +24,7 @@ content:
 category:
   image:
     repository: jasonmishi/g11-category-service
-    tag: v1.0.2
+    tag: v1.0.3
     pullPolicy: IfNotPresent
 
 gateway:
