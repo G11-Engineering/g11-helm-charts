@@ -12,19 +12,19 @@ frontend:
 user:
   image:
     repository: jasonmishi/g11-user-service
-    tag: latest
+    tag: v1.0.4
     pullPolicy: IfNotPresent
 
 content:
   image:
     repository: jasonmishi/g11-content-service
-    tag: latest
+    tag: v0.0.1
     pullPolicy: IfNotPresent
 
 category:
   image:
     repository: jasonmishi/g11-category-service
-    tag: latest
+    tag: v0.0.1
     pullPolicy: IfNotPresent
 
 gateway:
