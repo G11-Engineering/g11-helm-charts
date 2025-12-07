@@ -6,7 +6,7 @@
 frontend:
   image:
     repository: jasonmishi/g11-frontend-service
-    tag: v1.0.7
+    tag: latest
     pullPolicy: Always
 
 user:
