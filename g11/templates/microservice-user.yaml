@@ -31,9 +31,9 @@ spec:
         timeoutSeconds: 5
     successCondition: result.statusCode == 200
     failureLimit: 2
-    inconclusiveLimit: 5
+    inconclusiveLimit: 2
     interval: 15s
-    count: 3
+    count: 5
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
