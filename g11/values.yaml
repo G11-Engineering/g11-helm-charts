@@ -12,7 +12,7 @@ frontend:
 user:
   image:
     repository: jasonmishi/g11-user-service
-    tag: v1.0.4
+    tag: v1.0.5
     pullPolicy: IfNotPresent
 
 content:
