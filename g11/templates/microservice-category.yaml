@@ -96,3 +96,8 @@ spec:
         port:
           number: 3004
       weight: 100
+    - destination:
+        host: category-canary
+        port:
+          number: 3004
+      weight: 0

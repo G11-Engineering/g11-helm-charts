@@ -106,3 +106,8 @@ spec:
         port:
           number: 3001
       weight: 100
+    - destination:
+        host: user-canary
+        port:
+          number: 3001
+      weight: 0

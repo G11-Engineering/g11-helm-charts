@@ -96,3 +96,8 @@ spec:
         port:
           number: 3002
       weight: 100
+    - destination:
+        host: content-canary
+        port:
+          number: 3002
+      weight: 0
