@@ -19,6 +19,20 @@ metadata:
   name: g11-frontend
 ---
 apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: frontend-health-check
+spec:
+  metrics:
+  - name: http-check
+    provider:
+      web:
+        url: http://frontend-canary:3000
+    successCondition: result.statusCode == 200
+    interval: 15s
+    count: 3
+---
+apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: frontend
@@ -67,15 +81,30 @@ spec:
             name: g11blog
             routes:
             - primary
+      analysis:
+        templates:
+        - templateName: frontend-health-check
       steps:
       - setWeight: 20
       - pause: {duration: 30s}
+      - analysis:
+          templates:
+          - templateName: frontend-health-check
       - setWeight: 40
       - pause: {duration: 30s}
+      - analysis:
+          templates:
+          - templateName: frontend-health-check
       - setWeight: 60
       - pause: {duration: 30s}
+      - analysis:
+          templates:
+          - templateName: frontend-health-check
       - setWeight: 80
       - pause: {duration: 30s}
+      - analysis:
+          templates:
+          - templateName: frontend-health-check
 ---
 apiVersion: v1
 kind: Service
