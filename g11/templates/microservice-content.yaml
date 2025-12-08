@@ -62,6 +62,8 @@ spec:
           valueFrom: { secretKeyRef: { name: {{ .Values.postgres.clusterName }}-pguser-contentdbuser, key: uri } }
         - name: NODE_ENV
           value: 'production'
+        - name: JWT_SECRET
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: jwt-secret } }
         ports:
         - containerPort: 3002
   strategy:
