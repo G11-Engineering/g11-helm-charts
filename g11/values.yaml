@@ -50,6 +50,7 @@ category:
 gateway:
   selector: ingressgateway
   hostname: '"*"'
+  port: 80
 
   httpsRedirect: false
 

@@ -8,7 +8,7 @@ spec:
     istio: {{ .Values.gateway.selector }}
   servers:
     - port:
-        number: 80
+        number: {{ .Values.gateway.port }}
         name: http
         protocol: HTTP
       hosts:
