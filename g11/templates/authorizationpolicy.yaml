@@ -1,6 +1,6 @@
 ---
 # Authorization Policy for Content Service
-# Only allows requests from frontend service
+# Allows all requests
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
@@ -12,12 +12,10 @@ spec:
       app: content
   action: ALLOW
   rules:
-  - from:
-    - source:
-        principals: ["cluster.local/ns/{{ .Release.Namespace }}/sa/g11-frontend"]
+  - {}
 ---
 # Authorization Policy for Category Service
-# Only allows requests from frontend and user service
+# Allows all requests
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
@@ -29,14 +27,10 @@ spec:
       app: category
   action: ALLOW
   rules:
-  - from:
-    - source:
-        principals: 
-        - "cluster.local/ns/{{ .Release.Namespace }}/sa/g11-frontend"
-        - "cluster.local/ns/{{ .Release.Namespace }}/sa/g11-content"
+  - {}
 ---
 # Authorization Policy for User Service
-# Allows requests from frontend, content, and category services
+# Allows all requests
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
@@ -48,9 +42,4 @@ spec:
       app: user
   action: ALLOW
   rules:
-  - from:
-    - source:
-        principals: 
-        - "cluster.local/ns/{{ .Release.Namespace }}/sa/g11-frontend"
-        - "cluster.local/ns/{{ .Release.Namespace }}/sa/g11-content"
-        - "cluster.local/ns/{{ .Release.Namespace }}/sa/g11-category"
+  - {}t 
