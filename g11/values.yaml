@@ -18,7 +18,6 @@ secrets:
   asgardeo:
     orgName: "g11engineering"
     clientId: "Y4Yrhdn2PcIxQRLfWYDdEycYTfUa"
-    clientSecret: ""
     m2mClientId: "Z4uhhDswzZBUBcJX9caVDFLmys0a"
     m2mClientSecret: ""
 
