@@ -1,0 +1,58 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: istiocontrolplane
+  namespace: istio-system
+spec:
+  components:
+    ingressGateways:
+      - name: istio-ingressgateway
+        enabled: true
+        k8s:
+          service:
+            type: NodePort
+            ports:
+              - name: http2
+                port: 80
+                targetPort: 8080
+                nodePort: 30080
+                protocol: TCP
+              - name: argocd
+                port: 980
+                targetPort: 8980
+                nodePort: 30980
+                protocol: TCP
+              - name: staging
+                port: 180
+                targetPort: 8180
+                nodePort: 30180
+                protocol: TCP
+          nodeSelector:
+            ingress-ready: "true"
+          hpaSpec:
+            maxReplicas: 1
+
+    pilot:
+      enabled: true
+      k8s:
+        env:
+          - name: ENABLE_NATIVE_SIDECARS
+            value: "true"
+        hpaSpec:
+          maxReplicas: 1
+
+    cni:
+      enabled: true
+
+  meshConfig:
+    accessLogFile: "/dev/stdout"
+    accessLogEncoding: "JSON"
+
+  values:
+    cni:
+      excludeNamespaces:
+        - istio-system
+        - kube-system
+    sidecarInjectorWebhook:
+      rewriteAppHTTPProbe: true
+
