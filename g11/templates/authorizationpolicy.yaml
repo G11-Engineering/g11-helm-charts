@@ -42,4 +42,4 @@ spec:
       app: user
   action: ALLOW
   rules:
-  - {}t 
+  - {}
