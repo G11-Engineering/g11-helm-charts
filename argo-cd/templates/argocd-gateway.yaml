@@ -11,7 +11,7 @@ spec:
         - "*"
       port:
         name: http
-        number: 180
+        number: 980
         protocol: HTTP
       tls:
         httpsRedirect: false
