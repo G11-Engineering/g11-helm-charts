@@ -28,6 +28,7 @@ frontend:
     repository: jasonmishi/g11-frontend-service
     tag: v1.0.7
     pullPolicy: IfNotPresent
+  asgardeoRedirectUrl: "http://localhost:8080"
 
 user:
   image:

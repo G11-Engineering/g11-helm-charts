@@ -65,7 +65,7 @@ spec:
         - name: NEXT_PUBLIC_CATEGORY_SERVICE_URL
           value: "http://category:3004"
         - name: NEXT_PUBLIC_ASGARDEO_REDIRECT_URL
-          value: "http://localhost:8080"
+          value: {{ .Values.frontend.asgardeoRedirectUrl | quote }}
         ports:
         - containerPort: 3000
         resources:
