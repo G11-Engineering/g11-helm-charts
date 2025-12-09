@@ -8,6 +8,7 @@ instances:
     accessModes:
       - ReadWriteOnce
     size: 1Gi
+    storageClassName: "efs-sc"
 
 backups:
   pgbackrest:
@@ -18,4 +19,5 @@ backups:
         accessModes:
           - ReadWriteOnce
         size: 1Gi
+        storageClassName: "efs-sc"
 
