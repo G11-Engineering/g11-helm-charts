@@ -11,11 +11,10 @@ storageClass:
     provisioningMode: "efs-ap"
     fileSystemId: "fs-04e421b4433438b9c"  # Override with --set storageClass.parameters.fileSystemId=${efs_id}
     directoryPerms: "700"
+    uid: "26"  # Postgres UID
+    gid: "26"  # Postgres GID
   reclaimPolicy: "Delete"
   volumeBindingMode: "Immediate"
-  # Security context for volumes using this storage class
-  fsGroup: 26  # Postgres UID/GID
-  fsGroupChangePolicy: "OnRootMismatch"
 
 instances:
   name: "instance1"
