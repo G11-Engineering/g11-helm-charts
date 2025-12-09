@@ -13,6 +13,9 @@ storageClass:
     directoryPerms: "700"
   reclaimPolicy: "Delete"
   volumeBindingMode: "Immediate"
+  # Security context for volumes using this storage class
+  fsGroup: 26  # Postgres UID/GID
+  fsGroupChangePolicy: "OnRootMismatch"
 
 instances:
   name: "instance1"

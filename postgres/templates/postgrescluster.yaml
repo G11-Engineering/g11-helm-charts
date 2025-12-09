@@ -34,10 +34,24 @@ spec:
         resources:
           requests:
             storage: {{ .Values.instances.dataVolume.size }}
+      {{- if .Values.storageClass.fsGroup }}
+      podSecurityContext:
+        fsGroup: {{ .Values.storageClass.fsGroup }}
+        {{- if .Values.storageClass.fsGroupChangePolicy }}
+        fsGroupChangePolicy: {{ .Values.storageClass.fsGroupChangePolicy }}
+        {{- end }}
+      {{- end }}
 
   backups:
     pgbackrest:
       image: {{ .Values.backups.pgbackrest.image }}
+      {{- if .Values.storageClass.fsGroup }}
+      podSecurityContext:
+        fsGroup: {{ .Values.storageClass.fsGroup }}
+        {{- if .Values.storageClass.fsGroupChangePolicy }}
+        fsGroupChangePolicy: {{ .Values.storageClass.fsGroupChangePolicy }}
+        {{- end }}
+      {{- end }}
       repos:
         - name: {{ .Values.backups.pgbackrest.repos.name }}
           volume:
