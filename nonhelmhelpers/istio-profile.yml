@@ -27,8 +27,6 @@ spec:
                 targetPort: 8980
                 nodePort: 30980
                 protocol: TCP
-          nodeSelector:
-            ingress-ready: "true"
           hpaSpec:
             maxReplicas: 1
 
