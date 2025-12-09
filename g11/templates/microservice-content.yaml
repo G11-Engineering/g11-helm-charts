@@ -78,10 +78,14 @@ spec:
             - primary
       steps:
       - setWeight: 0
+      - setCanaryScale:
+          replicas: 1
       - pause: {duration: 30s}
       - analysis:
           templates:
           - templateName: content-health-check
+      - setCanaryScale:
+          matchTrafficWeight: true
       - setWeight: 20
       - pause: {duration: 30s}
       - analysis:
