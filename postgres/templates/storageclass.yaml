@@ -1,14 +1,4 @@
 {{- if .Values.storageClass.create }}
-{{- $efsId := "" }}
-{{- if .Values.storageClass.efsConfigMap.enabled }}
-{{- $configMap := lookup "v1" "ConfigMap" .Values.storageClass.efsConfigMap.namespace .Values.storageClass.efsConfigMap.name }}
-{{- if $configMap }}
-{{- $efsId = index $configMap.data .Values.storageClass.efsConfigMap.key }}
-{{- end }}
-{{- end }}
-{{- if not $efsId }}
-{{- $efsId = .Values.storageClass.parameters.fileSystemId }}
-{{- end }}
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -17,11 +7,7 @@ provisioner: {{ .Values.storageClass.provisioner }}
 {{- if .Values.storageClass.parameters }}
 parameters:
 {{- range $key, $value := .Values.storageClass.parameters }}
-  {{- if eq $key "fileSystemId" }}
-  {{ $key }}: {{ $efsId | quote }}
-  {{- else }}
   {{ $key }}: {{ $value | quote }}
-  {{- end }}
 {{- end }}
 {{- end }}
 reclaimPolicy: {{ .Values.storageClass.reclaimPolicy | default "Delete" }}

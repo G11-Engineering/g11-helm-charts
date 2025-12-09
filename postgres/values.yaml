@@ -7,15 +7,9 @@ storageClass:
   create: true
   name: "efs-sc"
   provisioner: "efs.csi.aws.com"
-  # ConfigMap configuration for EFS ID
-  efsConfigMap:
-    enabled: true
-    name: "efs-config"
-    namespace: "g11-prod"
-    key: "efs-id"
   parameters:
     provisioningMode: "efs-ap"
-    fileSystemId: "fs-04e421b4433438b9c"  # Fallback value if ConfigMap is not found
+    fileSystemId: "fs-04e421b4433438b9c"  # Override with --set storageClass.parameters.fileSystemId=${efs_id}
     directoryPerms: "700"
   reclaimPolicy: "Delete"
   volumeBindingMode: "Immediate"
