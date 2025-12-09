@@ -79,6 +79,7 @@ spec:
     canary:
       canaryService: frontend-canary
       stableService: frontend
+      maxUnavailable: 0
       trafficRouting:
         istio:
           virtualService:
@@ -87,7 +88,7 @@ spec:
             - primary
       steps:
       - setWeight: 0
-      - pause: {duration: 30s}
+      - pause: {duration: 2m}
       - analysis:
           templates:
           - templateName: frontend-health-check
