@@ -25,14 +25,14 @@ secrets:
 frontend:
   image:
     repository: jasonmishi/g11-frontend-service
-    tag: v1.0.10
+    tag: v1.0.12
     pullPolicy: IfNotPresent
   asgardeoRedirectUrl: "http://localhost:8080"
 
 user:
   image:
     repository: jasonmishi/g11-user-service
-    tag: v1.0.6
+    tag: v1.0.7
     pullPolicy: IfNotPresent
 
 content:
