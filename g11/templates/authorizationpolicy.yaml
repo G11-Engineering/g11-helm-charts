@@ -12,6 +12,10 @@ spec:
       app: content
   action: ALLOW
   rules:
+  # Allow health checks from any source
+  - to:
+    - operation:
+        paths: ["/health"]
   # Frontend can only access /api/* routes
   - from:
     - source:
@@ -33,6 +37,10 @@ spec:
       app: category
   action: ALLOW
   rules:
+  # Allow health checks from any source
+  - to:
+    - operation:
+        paths: ["/health"]
   # Frontend can only access /api/* routes
   - from:
     - source:
@@ -58,6 +66,10 @@ spec:
       app: user
   action: ALLOW
   rules:
+  # Allow health checks from any source
+  - to:
+    - operation:
+        paths: ["/health"]
   # Frontend can only access /api/* routes
   - from:
     - source:
