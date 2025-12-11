@@ -72,6 +72,8 @@ spec:
           valueFrom: { secretKeyRef: { name: g11-app-secrets, key: asgardeo-client-secret } }
         - name: AUTH_ASGARDEO_ISSUER
           valueFrom: { secretKeyRef: { name: g11-app-secrets, key: asgardeo-issuer } }
+        - name: AUTH_TRUST_HOST
+          value: "true"
         ports:
         - containerPort: 3000
         resources:
