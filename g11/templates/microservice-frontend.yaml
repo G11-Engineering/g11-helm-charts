@@ -64,8 +64,14 @@ spec:
           value: "http://content:3002"
         - name: NEXT_PUBLIC_CATEGORY_SERVICE_URL
           value: "http://category:3004"
-        - name: NEXT_PUBLIC_ASGARDEO_REDIRECT_URL
-          value: {{ .Values.frontend.asgardeoRedirectUrl | quote }}
+        - name: AUTH_SECRET
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: jwt-secret } }
+        - name: AUTH_ASGARDEO_ID
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: asgardeo-client-id } }
+        - name: AUTH_ASGARDEO_SECRET
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: asgardeo-client-secret } }
+        - name: AUTH_ASGARDEO_ISSUER
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: asgardeo-issuer } }
         ports:
         - containerPort: 3000
         resources:

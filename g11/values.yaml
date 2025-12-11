@@ -11,23 +11,24 @@ postgres:
 # Application secrets configuration
 # These should be overridden in production using --set or separate values files
 secrets:
-  # JWT secret for user service authentication
+  # JWT secret for user service authentication (also used as AUTH_SECRET for frontend)
   jwtSecret: ""
   
   # Asgardeo OAuth credentials
   asgardeo:
     orgName: "g11engineering"
     clientId: "Y4Yrhdn2PcIxQRLfWYDdEycYTfUa"
+    clientSecret: ""
     m2mClientId: "Z4uhhDswzZBUBcJX9caVDFLmys0a"
     m2mClientSecret: ""
+    issuer: "https://api.asgardeo.io/t/g11engineering/oauth2/token"
 
 # Microservices image configuration
 frontend:
   image:
     repository: jasonmishi/g11-frontend-service
-    tag: v1.0.12
+    tag: v1.1.1
     pullPolicy: IfNotPresent
-  asgardeoRedirectUrl: "http://localhost:8080"
 
 user:
   image:
