@@ -28,9 +28,12 @@ kubectl get pods -n g11-prod -l postgres-operator.crunchydata.com/pgbackrest-bac
 kubectl create namespace g11-stg
 kubectl label namespace g11-stg istio-injection=enabled
 
-helm install hippo-stg ../g11-helm-charts/postgres/ -n g11-stg
+helm install hippo-stg ../g11-helm-charts/postgres/ -n g11-stg --set storageClass.create=false
 
 kubectl get pods -n g11-stg -l postgres-operator.crunchydata.com/pgbackrest-backup // to check if it is working
+
+you have to install argocd rollouts for arm linux
+
 
 // Then go into argoCD and create application make sure to enter secretes in the yaml file
 

@@ -1,0 +1,11 @@
+---
+# PeerAuthentication for the entire namespace
+# Enforces mTLS for all services in the namespace
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: {{ .Release.Namespace }}
+spec:
+  mtls:
+    mode: STRICT
