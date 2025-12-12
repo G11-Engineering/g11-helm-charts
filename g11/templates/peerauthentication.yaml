@@ -1,6 +1,6 @@
 ---
-# PeerAuthentication for the entire namespace
-# Enforces mTLS for all services in the namespace
+# Enforces STRICT mTLS for all service-to-service communication
+# ArgoCD namespace should have Istio enabled, so health checks will use mTLS
 apiVersion: security.istio.io/v1beta1
 kind: PeerAuthentication
 metadata:

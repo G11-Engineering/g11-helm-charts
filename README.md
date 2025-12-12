@@ -8,7 +8,9 @@ argocd: 8980
 istioctl install -f install-istio.yaml -y
 curl -sI http://localhost:15021/healthz/ready // to check if working
 
-helm install argocd ../g11-helm-charts/argo-cd/ -n argocd --create-namespace
+kubectl label namespace argocd istio-injection=enabled
+
+helm install argocd ../g11-helm-charts/argo-cd/ -n argocd
 
 kubectl get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" -n argocd | base64 -d
 
