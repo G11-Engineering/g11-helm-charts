@@ -4,8 +4,11 @@ argo-cd:
       - --insecure
 
 # cert-manager configuration (Helm subchart)
+# CRDs should be installed separately before running helm upgrade
+# kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.3/cert-manager.crds.yaml
 cert-manager:
-  installCRDs: true  # Install cert-manager CRDs
+  crds:
+    enabled: true
   global:
     leaderElection:
       namespace: cert-manager
