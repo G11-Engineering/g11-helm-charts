@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
 spec:
   hosts:
-    - "*"
+    - {{ .Values.gateway.hostname }}
   gateways:
     - argocd-gateway
   http:

@@ -20,4 +20,26 @@ spec:
     - http01:
         ingress:
           class: istio
+---
+# Let's Encrypt Staging ClusterIssuer for testing
+# Use this for development/testing to avoid production rate limits
+# Certificates will NOT be trusted by browsers
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    # Let's Encrypt staging server (no rate limits, untrusted certs)
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    # Email for certificate expiration notifications (required)
+    email: {{ .Values.certManager.email }}
+    # cert-manager auto-generates and stores the account key here
+    privateKeySecretRef:
+      name: letsencrypt-staging-account-key
+    # HTTP-01 challenge solver using Istio ingress
+    solvers:
+    - http01:
+        ingress:
+          class: istio
 {{- end }}

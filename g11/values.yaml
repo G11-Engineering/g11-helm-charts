@@ -60,7 +60,8 @@ gateway:
     secretName: g11blog-tls
     gatewayNamespace: istio-system
     acme:
-      enabled: false
+      enabled: true
+      useStaging: true  # Use Let's Encrypt staging for testing (no rate limits, untrusted certs)
       renewBefore: 720h  # Renew 30 days before expiration
       issuerName: letsencrypt
       issuerKind: ClusterIssuer

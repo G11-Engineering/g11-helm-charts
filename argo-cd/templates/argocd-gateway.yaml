@@ -8,11 +8,22 @@ spec:
     istio: ingressgateway
   servers:
     - hosts:
-        - "*"
+        - {{ .Values.gateway.hostname }}
       port:
         name: http
-        number: 980
+        number: 9080
         protocol: HTTP
       tls:
         httpsRedirect: false
+    {{- if .Values.gateway.tls.enabled }}
+    - hosts:
+        - {{ .Values.gateway.hostname }}
+      port:
+        name: https
+        number: 9443
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: {{ .Values.gateway.tls.secretName }}
+    {{- end }}
 

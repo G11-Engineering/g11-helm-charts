@@ -3,6 +3,19 @@ argo-cd:
     extraArgs:
       - --insecure
 
+# ArgoCD Gateway configuration
+gateway:
+  hostname: '"*"'
+  tls:
+    enabled: false
+    secretName: argocd-tls
+    acme:
+      enabled: true
+      useStaging: true  # Use Let's Encrypt staging for testing (no rate limits, untrusted certs)
+      renewBefore: 720h
+      issuerName: letsencrypt
+      issuerKind: ClusterIssuer
+
 # ClusterIssuer configuration for Let's Encrypt
 # Requires cert-manager to be installed separately on the cluster
 certManager:

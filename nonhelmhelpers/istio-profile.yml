@@ -12,20 +12,40 @@ spec:
           service:
             type: NodePort
             ports:
+              # Production HTTP/HTTPS
               - name: http2
                 port: 80
                 targetPort: 8080
                 nodePort: 30080
                 protocol: TCP
-              - name: staging
-                port: 180
-                targetPort: 8180
-                nodePort: 30180
+              - name: https
+                port: 443
+                targetPort: 8443
+                nodePort: 30443
                 protocol: TCP
-              - name: argocd
-                port: 980
-                targetPort: 8980
-                nodePort: 30980
+              
+              # Staging HTTP/HTTPS (unique ports)
+              - name: staging-http
+                port: 8081
+                targetPort: 8081
+                nodePort: 30081
+                protocol: TCP
+              - name: staging-https
+                port: 8444
+                targetPort: 8444
+                nodePort: 30444
+                protocol: TCP
+              
+              # ArgoCD HTTP/HTTPS (unique ports)
+              - name: argocd-http
+                port: 8082
+                targetPort: 8082
+                nodePort: 30082
+                protocol: TCP
+              - name: argocd-https
+                port: 8445
+                targetPort: 8445
+                nodePort: 30445
                 protocol: TCP
           hpaSpec:
             maxReplicas: 1
