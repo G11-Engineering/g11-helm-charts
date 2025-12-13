@@ -5,5 +5,8 @@ dependencies:
 - name: argo-rollouts
   repository: https://argoproj.github.io/argo-helm
   version: 2.40.5
-digest: sha256:992caaa8703944439cd1b979119ab46e5c0318b8f508e69c9cfbe560e7c32c88
-generated: "2025-12-07T13:43:41.235310648+05:30"
+- name: cert-manager
+  repository: https://charts.jetstack.io
+  version: v1.15.3
+digest: sha256:31f3dbde16471e7e27cac9aebe57a0e3366d7280c099dd8a57eeac43fee26b0a
+generated: "2025-12-13T13:57:24.768802196+05:30"
