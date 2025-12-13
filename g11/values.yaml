@@ -51,8 +51,8 @@ category:
 gateway:
   selector: ingressgateway
   hostname: '"*"'
-  port: 80
-
+  port: 80  # HTTP port (production: 80, staging: 8081)
+  httpsPort: 443  # HTTPS port (production: 443, staging: 8444)
   httpsRedirect: false
 
   tls:

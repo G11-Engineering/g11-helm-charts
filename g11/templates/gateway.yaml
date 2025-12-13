@@ -17,7 +17,7 @@ spec:
         httpsRedirect: {{ .Values.gateway.httpsRedirect }}
     {{- if .Values.gateway.tls.enabled }}
     - port:
-        number: 443
+        number: {{ .Values.gateway.httpsPort }}
         name: https
         protocol: HTTPS
       hosts:
