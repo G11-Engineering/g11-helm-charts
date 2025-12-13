@@ -3,7 +3,14 @@ argo-cd:
     extraArgs:
       - --insecure
 
-# cert-manager ClusterIssuer configuration
+# cert-manager configuration (Helm subchart)
+cert-manager:
+  installCRDs: true  # Install cert-manager CRDs
+  global:
+    leaderElection:
+      namespace: cert-manager
+
+# ClusterIssuer configuration for Let's Encrypt
 certManager:
   enabled: true
   email: "your-email@example.com"  # Replace with your email for Let's Encrypt notifications

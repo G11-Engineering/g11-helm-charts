@@ -8,4 +8,7 @@ dependencies:
   - name: argo-rollouts
     version: 2.40.5
     repository: https://argoproj.github.io/argo-helm
+  - name: cert-manager
+    version: v1.15.3
+    repository: https://charts.jetstack.io
 
