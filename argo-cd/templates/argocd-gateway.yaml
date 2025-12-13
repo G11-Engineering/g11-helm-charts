@@ -11,7 +11,7 @@ spec:
         - {{ .Values.gateway.hostname }}
       port:
         name: http
-        number: 8082
+        number: 80
         protocol: HTTP
       tls:
         httpsRedirect: false
@@ -20,7 +20,7 @@ spec:
         - {{ .Values.gateway.hostname }}
       port:
         name: https
-        number: 8445
+        number: 443
         protocol: HTTPS
       tls:
         mode: SIMPLE

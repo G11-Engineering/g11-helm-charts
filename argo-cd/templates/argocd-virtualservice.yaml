@@ -9,19 +9,6 @@ spec:
   gateways:
     - argocd-gateway
   http:
-    {{- if and .Values.gateway.tls.enabled .Values.gateway.tls.acme.enabled }}
-    # Route ACME challenges to cert-manager solver
-    - match:
-      - uri:
-          prefix: /.well-known/acme-challenge/
-      route:
-        - destination:
-            # Stable service that selects solver pods by label
-            host: cert-manager-solver.istio-system.svc.cluster.local
-            port:
-              number: 8089
-    {{- end }}
-    # Route all other traffic to ArgoCD
     - route:
         - destination:
             host: argocd-server.argocd.svc.cluster.local
