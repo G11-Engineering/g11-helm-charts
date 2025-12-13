@@ -3,17 +3,8 @@ argo-cd:
     extraArgs:
       - --insecure
 
-# cert-manager configuration (Helm subchart)
-# CRDs should be installed separately before running helm upgrade
-# kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.3/cert-manager.crds.yaml
-cert-manager:
-  crds:
-    enabled: true
-  global:
-    leaderElection:
-      namespace: cert-manager
-
 # ClusterIssuer configuration for Let's Encrypt
+# Requires cert-manager to be installed separately on the cluster
 certManager:
   enabled: true
   email: "your-email@example.com"  # Replace with your email for Let's Encrypt notifications
