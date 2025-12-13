@@ -2,3 +2,8 @@ argo-cd:
   server:
     extraArgs:
       - --insecure
+
+# cert-manager ClusterIssuer configuration
+certManager:
+  enabled: true
+  email: "your-email@example.com"  # Replace with your email for Let's Encrypt notifications

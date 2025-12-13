@@ -1,9 +1,9 @@
 ---
 {{- if and .Values.gateway.tls.enabled .Values.gateway.tls.acme.enabled }}
-apiVersion: {{ .Values.gateway.tls.acme.certManager.version }}
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: g11blog
+  name: g11blog-tls
   namespace: {{ .Values.gateway.tls.gatewayNamespace }}
 spec:
   secretName: {{ .Values.gateway.tls.secretName }}

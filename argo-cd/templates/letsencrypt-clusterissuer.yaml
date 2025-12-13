@@ -1,0 +1,23 @@
+---
+{{- if .Values.certManager.enabled }}
+# Let's Encrypt ClusterIssuer for production certificates
+# cert-manager automatically creates an ACME account and stores the key
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    # Let's Encrypt production server
+    server: https://acme-v02.api.letsencrypt.org/directory
+    # Email for certificate expiration notifications (required)
+    email: {{ .Values.certManager.email }}
+    # cert-manager auto-generates and stores the account key here
+    privateKeySecretRef:
+      name: letsencrypt-account-key
+    # HTTP-01 challenge solver using Istio ingress
+    solvers:
+    - http01:
+        ingress:
+          class: istio
+{{- end }}
