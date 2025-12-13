@@ -1,0 +1,18 @@
+{{- if and .Values.gateway.tls.enabled .Values.gateway.tls.acme.enabled }}
+---
+# Stable Service that selects cert-manager solver pods by label
+# This allows VirtualService to route to a consistent hostname
+apiVersion: v1
+kind: Service
+metadata:
+  name: cert-manager-solver
+  namespace: istio-system
+spec:
+  selector:
+    acme.cert-manager.io/http01-solver: "true"
+  ports:
+    - name: http
+      port: 8089
+      targetPort: 8089
+      protocol: TCP
+{{- end }}
