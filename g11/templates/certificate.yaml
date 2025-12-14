@@ -6,7 +6,7 @@ metadata:
   name: {{ include "g11.fullname" . }}-tls
   namespace: {{ .Values.gateway.tls.gatewayNamespace }}
 spec:
-  secretName: {{ .Values.gateway.tls.secretName }}
+  secretName: {{ include "g11.fullname" . }}-tls
   renewBefore: {{ .Values.gateway.tls.acme.renewBefore }}
   commonName: {{ .Values.gateway.hostname }}
   dnsNames:
