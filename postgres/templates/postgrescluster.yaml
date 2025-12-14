@@ -28,6 +28,9 @@ spec:
         {{- range .Values.instances.dataVolume.accessModes }}
         - "{{ . }}"
         {{- end }}
+        {{- if .Values.instances.dataVolume.storageClassName }}
+        storageClassName: {{ .Values.instances.dataVolume.storageClassName }}
+        {{- end }}
         resources:
           requests:
             storage: {{ .Values.instances.dataVolume.size }}
@@ -42,6 +45,9 @@ spec:
               accessModes:
               {{- range .Values.backups.pgbackrest.repos.dataVolume.accessModes }}
               - "{{ . }}"
+              {{- end }}
+              {{- if .Values.backups.pgbackrest.repos.dataVolume.storageClassName }}
+              storageClassName: {{ .Values.backups.pgbackrest.repos.dataVolume.storageClassName }}
               {{- end }}
               resources:
                 requests:

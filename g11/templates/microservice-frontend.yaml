@@ -64,8 +64,18 @@ spec:
           value: "http://content:3002"
         - name: NEXT_PUBLIC_CATEGORY_SERVICE_URL
           value: "http://category:3004"
-        - name: NEXT_PUBLIC_ASGARDEO_REDIRECT_URL
-          value: "http://localhost:8080"
+        - name: AUTH_SECRET
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: jwt-secret } }
+        - name: AUTH_ASGARDEO_ID
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: asgardeo-client-id } }
+        - name: AUTH_ASGARDEO_SECRET
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: asgardeo-client-secret } }
+        - name: AUTH_ASGARDEO_ISSUER
+          valueFrom: { secretKeyRef: { name: g11-app-secrets, key: asgardeo-issuer } }
+        - name: AUTH_TRUST_HOST
+          value: "true"
+        - name: AUTH_URL
+          value: "http://blog.jasonmishi.com"
         ports:
         - containerPort: 3000
         resources:
@@ -82,15 +92,19 @@ spec:
       trafficRouting:
         istio:
           virtualService:
-            name: g11blog
+            name: {{ include "g11.fullname" . }}
             routes:
             - primary
       steps:
       - setWeight: 0
+      - setCanaryScale:
+          replicas: 1
       - pause: {duration: 30s}
       - analysis:
           templates:
           - templateName: frontend-health-check
+      - setCanaryScale:
+          matchTrafficWeight: true
       - setWeight: 20
       - pause: {duration: 30s}
       - analysis:

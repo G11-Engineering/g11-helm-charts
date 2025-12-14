@@ -9,59 +9,64 @@ postgres:
   clusterName: hippo-postgres
 
 # Application secrets configuration
-# These should be overridden in production using --set or separate values files
 secrets:
-  # JWT secret for user service authentication
-  jwtSecret: ""
+  # When true, all secret values below should be encrypted with kubeseal
+  # When false, use plaintext values
+  useSealed: true
+  
+  # echo -n "my-jwt-secret" | kubeseal --raw --scope=cluster-wide
+  jwtSecret: AgBB/qPAq/P9fRYGlEidCyffQl6jkPNfA+sXnmPvB7PkebTJEyElcQOOjmFQsDQVa2K7tMbvMdTwKs2xozOFG3QKD2w1gMZkon90g0akX9v0n0oKdQarDNwdKhLcb25ScmgjeX57VoxUFbptzrgSxZ4gYTz4AjZObHUtU34HKbtm8FRtUgHIFQ/lxWZcs//8Oxzlm/6yPqI775iGdlXbQ1J3dKLp8SP4JNwoIkNbp6vvuIVldg8nCeuMbVGNy+RvcoehV7ZM2U0jH9ysuslRKcnSAH0Lj1tc/gbFOfkAfN6XshMZoMJEEAXtqEb08pR/rlk9OVO9v/mDPBfEYwoGO+8r9d3Ea8eHtQVU7vlLbvukJQ6tG+t6XZQpXNmD6qPg/O3ufTaKfrec4Fj0XVaDDjtGmH4DaSyX89hCjfbPmpgliXv6y0s3M7+eJC23ON85w2++7B7ERU00y+nhPcu4d03DBdTJVjPpDQKb78IiaBBb14+HA9n4jghcnUaHadbE2mv1dFyu2Qm0oTEMySdGAZCjvDL27L3zhkmPJe8J1DP9LE+/5vg53K0DtIotEJLNYLF2H4pDLG8vnibIK/uEzC2qFW3hvwr+H4OffVDoY/qvbVfbuMtmJit4YSUaMRB0BHt5Jh8DPhGcAAnv8n/92AhFsbC4ENQdt5+/9nJ+QXnSTQ5OFKk3TW8dj3t7raaQkNEklBgCJGFr082rAN5it7/R/ScS4tCo2W359y5ZAYAefik0SByX/uKpZQe2wg==
   
   # Asgardeo OAuth credentials
   asgardeo:
+    # These are public, no need to encrypt
     orgName: "g11engineering"
-    clientId: "Y4Yrhdn2PcIxQRLfWYDdEycYTfUa"
-    clientSecret: ""
+    clientId: "3J34qlpKrGYPvEU8jcaDUfKDxuQa"
     m2mClientId: "Z4uhhDswzZBUBcJX9caVDFLmys0a"
-    m2mClientSecret: ""
+    issuer: "https://api.asgardeo.io/t/g11engineering/oauth2/token"
+    
+    # echo -n "my-client-secret" | kubeseal --raw --scope=cluster-wide
+    clientSecret: AgB5BkARhKBNPUWYzu9xL13cFJ9+NuNFKmiDOsfNiMJT3pYJtAQaedQvMV9P4A3QcM+efcuTL1rIVlslHCma9hwYO+vYUOr7FwpgIcvT6rk3R9LrEQjQb64YRDwXUDdeiQ/PxTDxBszQSTF/Di9C8GOWntm5x7+uqgas1I/DVvDp6eFOP8I5kWVNNS4QQkKlk4J/U04CP3qu5s+QiEbGY2ckQSkyN/5I4rxmmabxUyeUjnL4xBeWxdorS/m9938TV2QoT2AYUYCdRWQhjdRC9WXY84y5eW7KWXnn2dQnOZrLI+jFuGAYO9byXGVUcfV4AewoD57cfB5BeU0/shRbCKCpNSTRAJ6hBve1OpWilNTk9P+gh4jXF25YgLSRInnkyDAOLlfzXwGlMM0hw+Mowg6mZHWGJg8oPPlnRPhY1ujA/zZE8dKK9eq718BmGFw18vmWGui8rr7guvLIb/hewlHZ+KW9U8/dtln1lFTrMbEgDs/3rSi4A5lYXfqCi/2P0Ob0BSHNspCtZGYVQRiQdYIaougaaiNMDz7Xz4bawSTwKvWkZZ9Fe0LNFoZxV3Zd7UpKdAb1LNcym7yhGicv4wYsquFDO2/57i8/D6WFdNxa/3VkdYu7JRyaLh2/HBkCYIZip7h32EyUKq8IO4YEOiV6VaORP/ArL7dIW0bqx31CLDgxi5Zq+w2VjEPwS5Dvbzg+gnJnC50HPjH8XqYyU2J4IFYxRSavI6eScxIfAYNCYAd8fR5IyxmYretRMA==
+    m2mClientSecret: AgAJ7bPhjFXQ1V4cGFcRJFT38LqD78CKe/9s2VPf/0EVuLFVVGYJjkXSLfg3aIVQ+HTdLQmwCuXKa3Ri/Oc5jjGwa1wpVsdZFI8RsQNUSbnqe/TFdjOW//5liAotpILwCGUglRCZbrU1w0yVTbVHPuByMrJo47rg5uD2TcXg2FG0Kle9yGEB9J5hbJUeCOGTjTxGd93d4vNUuykq3OjnNtNaCHtwuyoJ9VFXOUHMOUKNiUzrSA9bXjMs90qirABCR6jQzFgz4ZttNqmi4gNjk4OF8JIUdxGbW3C9sS/N7yte14wcMhSuBF3Zt7w2Pa5Dz+R1RHYoNy8XHf86IF/cH+6Bek15rxPl9ZDR9tCMltpTNJPCxbY8+k3mSRJjNRcaX9ry2TPdAQmd4du6ppEn0XZTFwYigTmodm5jQTbX+VxtrLDzPdrCaWP9NpMVQAEj1VyqA7wT79w2RTAd87IMAKCig4b/bgHLwb5sVCRm867+sDEnuIjIbEzq6Tm706VDq1x+joZQnc2Qx61qH6YZVd9FeyIjmuWZsE+Vk1Q4TaAfG9/LzU5r2V76hSGjfbzHORMBmtWr8DrBKxIsmlPaNSf0wtyCISU3mZQv0IOycR3OwKN2fhJ3xFu9uRgbiMLRpDOEfZxOdIhSEFxPxkUa/3aLkq+fH021h773SBJ79vCed6TMDvDDke/rNcuMKkTWdALFiPJrK47d+DrSbLvsFNaLSufdtttnNuZoTnkiy0lJzJ/RwX4twb6FxebWjQ==
 
 # Microservices image configuration
 frontend:
   image:
     repository: jasonmishi/g11-frontend-service
-    tag: v1.0.7
+    tag: v1.1.1
     pullPolicy: IfNotPresent
 
 user:
   image:
     repository: jasonmishi/g11-user-service
-    tag: v1.0.5
+    tag: v1.0.7
     pullPolicy: IfNotPresent
 
 content:
   image:
     repository: jasonmishi/g11-content-service
-    tag: v0.0.1
+    tag: v1.0.2
     pullPolicy: IfNotPresent
 
 category:
   image:
     repository: jasonmishi/g11-category-service
-    tag: v1.0.3
+    tag: v1.0.4
     pullPolicy: IfNotPresent
 
 gateway:
   selector: ingressgateway
   hostname: '"*"'
   port: 80
-
+  httpsPort: 443
   httpsRedirect: false
 
   tls:
-    enabled: false
-    secretName: bookinfo-tls
+    enabled: true
     gatewayNamespace: istio-system
     acme:
-      enabled: false
-      certManager:
-        version: certmanager.k8s.io/v1alpha1
-      renewBefore: 720h
+      enabled: true
+      useStaging: true  # Use Let's Encrypt staging for testing (no rate limits, untrusted certs)
+      renewBefore: 720h  # Renew 30 days before expiration
       issuerName: letsencrypt
       issuerKind: ClusterIssuer

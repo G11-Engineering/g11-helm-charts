@@ -2,12 +2,27 @@ postgres:
   image: "registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.4-0"
   version: 16
 
+# StorageClass configuration
+storageClass:
+  create: true
+  name: "efs-sc"
+  provisioner: "efs.csi.aws.com"
+  parameters:
+    provisioningMode: "efs-ap"
+    fileSystemId: "fs-04e421b4433438b9c"  # Override with --set storageClass.parameters.fileSystemId=${efs_id}
+    directoryPerms: "700"
+    uid: "26"  # Postgres UID
+    gid: "26"  # Postgres GID
+  reclaimPolicy: "Delete"
+  volumeBindingMode: "Immediate"
+
 instances:
   name: "instance1"
   dataVolume:
     accessModes:
       - ReadWriteOnce
     size: 1Gi
+    storageClassName: "efs-sc"
 
 backups:
   pgbackrest:
@@ -18,4 +33,5 @@ backups:
         accessModes:
           - ReadWriteOnce
         size: 1Gi
+        storageClassName: "efs-sc"
 
