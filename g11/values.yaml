@@ -9,19 +9,25 @@ postgres:
   clusterName: hippo-postgres
 
 # Application secrets configuration
-# These should be overridden in production using --set or separate values files
 secrets:
-  # JWT secret for user service authentication (also used as AUTH_SECRET for frontend)
-  jwtSecret: ""
+  # When true, all secret values below should be encrypted with kubeseal
+  # When false, use plaintext values
+  useSealed: true
+  
+  # echo -n "my-jwt-secret" | kubeseal --raw --scope=cluster-wide
+  jwtSecret: "AgAtZyL2G/OVJhT7hxB5UnRiM9lPJ1ItNE1oZtERN9B+InovnfmyCtxPKPcP1E3vC9N4o79tt1rRN9MWVUw6V5RELGUEuUujHk5nXgk5UKTdGCLJTUV0PGJRZxV0sfdyTiQuFDKiLldHlvLzbYXOcGM6rtYn/VKDGDn+T0qXmKhqQXunKVFFqA00EsFSntSW5e2KLBnraG7HtKY5+BVEfNQuWrr44JDbQGzzWSRvhskdBUyE/N5Qyy7Y+UR+AEyjS9j34Fd/kPMPDs3cEud4CGFX2EucP0MgNUxPKq+lOHnGQlljxjM5SwMOGbjq6jD3mJve3Tx0oitOapM/TZjR8dpyhwQAP9T/IIN8aw0d9/2vZ4injRPTJY13plVv3zYLBnHP0HuvHwvc36h2Az3o/xt6UCym2sgaia+N8D2sXgxZpTCugRQwtcf3kcvxfaaqxdmcJNyljSpDOjhq6keX/qutLMxQyaCDxkIv9v8kfzY1bDz2WpgNY9TWJVGiDJKyfXwd9VGoxywpcb3Q4ytsxporWjssM3frsYArVQbrrRa0D45sejldUa7ZWv9gdU4r6656EaElKJS8wEFEjIpz0XUbLUI4MFtM9p+uHPAv1DrlpUx1VFPc3mEo1u54NTkO8YbK+dQY4NnY3/gZksRDbxZEqXq9jcYxr5/gFSO2fHv1HmtKFDdtEi17IGyM5DmeiuzmRvKqxJsH25+LGTxalv+/TD+jEq8g/2Eiw/hDpZ6noERf4gJvJsx8uEoArA=="
   
   # Asgardeo OAuth credentials
   asgardeo:
+    # These are public, no need to encrypt
     orgName: "g11engineering"
-    clientId: "Y4Yrhdn2PcIxQRLfWYDdEycYTfUa"
-    clientSecret: ""
+    clientId: "3J34qlpKrGYPvEU8jcaDUfKDxuQa"
     m2mClientId: "Z4uhhDswzZBUBcJX9caVDFLmys0a"
-    m2mClientSecret: ""
     issuer: "https://api.asgardeo.io/t/g11engineering/oauth2/token"
+    
+    # echo -n "my-client-secret" | kubeseal --raw --scope=cluster-wide
+    clientSecret: "AgCUmEnthxm981TYTcmHap+CqnT8KDI7v+WBux2mZKbmvDnF648pRxxmSW55hiWG5OA3SWLyN+dbR8cRT2xbZ7i7GHTKvOMgLW/JQPWc0A7aE+7hwLSM05Sox+0ez7iIzJhJkFGDKw/phkJ5C/EElAh4VQ3c12qLhMOuZLuiymFYHgcLGqosup8053BsL8TQiD68UVPKLMZ48HfynBCR4092MQ/WhQhlz3vJ7+E0nT5Jyi1Ih3nh31xRaXuevMRZ4GthJPPvMV6lY5dxHA3tQjTwmdxMrBNcWMVNP00l+1WNeclUhgM1Fwc2r3NGFyHtVzSHCE1vEe7oOjRu+RpdBg2mCS38A4FNY0xO/maY2EyDr60cL9H8uTM4SxRQdF+bU5id8x9GUJi62Pc8G7oNBVhoX4nv2MVn5hCrMRnbmn9pWb7mf4Dy6TnTDNIC2XuxWHff/3NQyTyJ1Hs/f5pDzJX79136IDr6VvxSZZW1L4cPKmG68rINyFhdOp5oPk3wGxwDYhf5m0ayh/i5xDRtJFiwgHEZmgglw3d6yV7iyeKsYFatfJiPmoQs0c2C2Bd7JbjdmtGcLA4u1gqPbKLBO41wb/SgForCj6gqKpwfk9T5Oa4kXKk69ks4M7Nukfuta/7SFZErPC9wevYyoAt38e8WEV5x+Cr/oZMm4PNZUN52Nu856M/1Zj03wUKU1pfeUJMEPwHRnx3rYoBUnXco4wSuOXQ9LwNjxL1W+B4XgKdrism5j0abt+kdtwD/Xg=="
+    m2mClientSecret: "AgAK/PrCtHnsZQ5BxzRr5osXU6HKtZbrnbqPWEv1wFTXPSAXSeOJhQexgY/DOU5ULIFeyCgc/vbiRI/m08wl6wRLrJUe4NGCEzsDsqrh9Y9BNOwUkQLtzwKHikeO/DdlAqv1BaUx7DeKsUZiqW4L0bZfKm2PKPJFGj4qLRXXL6FK5JffxLrYIjWi4EQ7R9XverAhqApSk4iYGYIkpeUlGoiOIrvJqK+Bwk2k1tv0170IUchS4ppBntJUDNrFnmq+pGzPr0KbMkXVvhMFgJ5TFkev3Ujbma2ZmqMOlKFIc4MlE3H46qJrqU3gALNw8rpdSVZAIOZ6AMwaTgLX7/10hRI8k2yoHud6F3QZXeUupWPgz8pBBtprBlqiwHWoAgI7hn0J0qzitAXPJkjlesNJhM81EZC8ZGUvCszu4tGYmkg1qyVY2iOCRMdxkyasQ0byM3JZ4mDfoLkFfn4rmXHk3qE1+JbvOSjrHeKKjrVqPEN3ucVnsE6iQWeoYGFICzUwtUvJXmwLI23OxlBO1ZG4bXEM+Zl1SzJVbLRx9jjvD3mPCps+1lzbMJqlnT1AkVj8GIkVOha/7MjCYqjlwyy5dndBelw0wo5ylZLiZzXy3eX/aCerbd5Id1lbBIJNunE9DbQ9O6JuY03UPgkuRCgVheT+UiEBnECjzzqH8Mh7old5GgTzUSI+gmNuKqOAex31kTOrbNVXyl8UJxA9YE9QakBbHO4BD0AwkJljfFYIQeHEqQZDZiLrGU6PIYPUDA=="
 
 # Microservices image configuration
 frontend:
