@@ -62,7 +62,7 @@ gateway:
   httpsRedirect: false
 
   tls:
-    enabled: false
+    enabled: true
     secretName: g11blog-tls
     gatewayNamespace: istio-system
     acme:
