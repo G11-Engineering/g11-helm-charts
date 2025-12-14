@@ -2,12 +2,12 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: g11blog
+  name: {{ include "g11.fullname" . }}
 spec:
   hosts:
   - {{ .Values.gateway.hostname }}
   gateways:
-  - g11blog
+  - {{ include "g11.fullname" . }}
   http:
   - name: primary
     route:

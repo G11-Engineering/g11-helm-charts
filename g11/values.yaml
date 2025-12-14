@@ -57,13 +57,12 @@ category:
 gateway:
   selector: ingressgateway
   hostname: '"*"'
-  port: 80  # HTTP port (production: 80, staging: 8081)
-  httpsPort: 443  # HTTPS port (production: 443, staging: 8444)
+  port: 80
+  httpsPort: 443
   httpsRedirect: false
 
   tls:
     enabled: true
-    secretName: g11blog-tls
     gatewayNamespace: istio-system
     acme:
       enabled: true
