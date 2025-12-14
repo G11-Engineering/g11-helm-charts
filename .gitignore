@@ -1,2 +1,7 @@
 # Chart dependencies
 **/charts/*.tgz
+
+# Secrets - NEVER commit these!
+secrets.txt
+unsealed-secrets.yaml
+*-unsealed.yaml

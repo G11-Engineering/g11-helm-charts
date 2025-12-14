@@ -24,29 +24,6 @@ spec:
                 nodePort: 30443
                 protocol: TCP
               
-              # Staging HTTP/HTTPS (unique ports)
-              - name: staging-http
-                port: 8081
-                targetPort: 8081
-                nodePort: 30081
-                protocol: TCP
-              - name: staging-https
-                port: 8444
-                targetPort: 8444
-                nodePort: 30444
-                protocol: TCP
-              
-              # ArgoCD HTTP/HTTPS (unique ports)
-              - name: argocd-http
-                port: 8082
-                targetPort: 8082
-                nodePort: 30082
-                protocol: TCP
-              - name: argocd-https
-                port: 8445
-                targetPort: 8445
-                nodePort: 30445
-                protocol: TCP
           hpaSpec:
             maxReplicas: 1
 
