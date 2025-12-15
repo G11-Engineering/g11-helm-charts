@@ -57,15 +57,14 @@ category:
 gateway:
   selector: ingressgateway
   hostname: '"*"'
-  port: 80
-  httpsPort: 443
-  httpsRedirect: false
+  port: 80  # HTTP port
+  httpsPort: 443  # HTTPS port
 
   tls:
-    enabled: true
-    gatewayNamespace: istio-system
+    enabled: true  # Enable HTTPS/TLS support and automatic HTTP to HTTPS redirect
+    gatewayNamespace: istio-system  # Namespace where the TLS secret will be created
     acme:
-      enabled: true
+      enabled: true  # Enable automatic certificate management via cert-manager
       useStaging: true  # Use Let's Encrypt staging for testing (no rate limits, untrusted certs)
       renewBefore: 720h  # Renew 30 days before expiration
       issuerName: letsencrypt

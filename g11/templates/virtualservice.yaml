@@ -9,6 +9,16 @@ spec:
   gateways:
   - {{ include "g11.fullname" . }}
   http:
+  {{- if .Values.gateway.tls.enabled }}
+  - match:
+    - uri:
+        prefix: /
+      scheme:
+        exact: http
+    redirect:
+      scheme: https
+      redirectCode: 301
+  {{- end }}
   - name: primary
     route:
     - destination:
