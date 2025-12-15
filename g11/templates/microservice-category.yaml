@@ -49,6 +49,8 @@ spec:
       app: category
   template:
     metadata:
+      annotations:
+        checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
       labels:
         app: category
     spec:
