@@ -9,6 +9,16 @@ spec:
   gateways:
     - argocd-gateway
   http:
+  {{- if .Values.gateway.tls.enabled }}
+    - match:
+      - uri:
+          prefix: /
+        scheme:
+          exact: http
+      redirect:
+        scheme: https
+        redirectCode: 301
+  {{- end }}
     - route:
         - destination:
             host: argocd-server.argocd.svc.cluster.local

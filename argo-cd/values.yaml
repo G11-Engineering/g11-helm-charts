@@ -7,7 +7,7 @@ argo-cd:
 gateway:
   hostname: '"*"'
   tls:
-    enabled: false
+    enabled: true
     secretName: argocd-tls
     acme:
       enabled: true
