@@ -3,20 +3,25 @@ kind: Application
 metadata:
   name: g11-stg
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-project: default
-source:
-  repoURL: https://github.com/G11-Engineering/g11-helm-charts
-  path: g11
-  targetRevision: staging
-  helm:
-    parameters:
-      - name: gateway.hostname
-        value: demostg.jasonmishi.com
-destination:
-  server: https://kubernetes.default.svc
-  namespace: g11-stg
-syncPolicy:
-  automated:
-    prune: true
-    enabled: true
+  project: default
+  source:
+    repoURL: https://github.com/G11-Engineering/g11-helm-charts
+    path: g11
+    targetRevision: staging
+    helm:
+      parameters:
+        - name: gateway.hostname
+          value: demostg.jasonmishi.com
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: g11-stg
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
