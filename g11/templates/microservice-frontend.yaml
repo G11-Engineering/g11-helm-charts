@@ -75,7 +75,7 @@ spec:
         - name: AUTH_TRUST_HOST
           value: "true"
         - name: AUTH_URL
-          value: "http://blog.jasonmishi.com"
+          value: "{{ if .Values.gateway.tls.enabled }}https{{ else }}http{{ end }}://{{ .Values.gateway.hostname }}"
         ports:
         - containerPort: 3000
         resources:
