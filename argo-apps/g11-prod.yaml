@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: g11-prod
+  namespace: argocd
+project: default
+source:
+  repoURL: https://github.com/G11-Engineering/g11-helm-charts
+  path: g11
+  targetRevision: main
+  helm:
+    parameters:
+      - name: gateway.hostname
+        value: blog.jasonmishi.com
+destination:
+  server: https://kubernetes.default.svc
+  namespace: g11-prod
+syncPolicy:
+  automated:
+    prune: true
+    enabled: true
