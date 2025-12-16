@@ -24,6 +24,6 @@ spec:
         protocol: HTTPS
       tls:
         mode: SIMPLE
-        credentialName: {{ .Values.gateway.tls.secretName }}
+        credentialName: {{ if .Values.gateway.tls.acme.useStaging }}argocd-tls-staging{{ else }}argocd-tls-prod{{ end }}
     {{- end }}
 

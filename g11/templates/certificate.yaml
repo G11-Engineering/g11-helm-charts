@@ -1,21 +1,36 @@
 ---
 {{- if and .Values.gateway.tls.enabled .Values.gateway.tls.acme.enabled }}
+{{- if .Values.gateway.tls.acme.useStaging }}
+# Staging Certificate (for testing)
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ include "g11.fullname" . }}-tls
+  name: {{ include "g11.fullname" . }}-tls-staging
   namespace: {{ .Values.gateway.tls.gatewayNamespace }}
 spec:
-  secretName: {{ include "g11.fullname" . }}-tls
+  secretName: {{ include "g11.fullname" . }}-tls-staging
   renewBefore: {{ .Values.gateway.tls.acme.renewBefore }}
   commonName: {{ .Values.gateway.hostname }}
   dnsNames:
     - {{ .Values.gateway.hostname }}
   issuerRef:
-    {{- if .Values.gateway.tls.acme.useStaging }}
-    name: {{ .Values.gateway.tls.acme.issuerName }}-staging
-    {{- else }}
-    name: {{ .Values.gateway.tls.acme.issuerName }}
-    {{- end }}
+    name: letsencrypt-staging
     kind: {{ .Values.gateway.tls.acme.issuerKind }}
+{{- else }}
+# Production Certificate (for production use)
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "g11.fullname" . }}-tls-prod
+  namespace: {{ .Values.gateway.tls.gatewayNamespace }}
+spec:
+  secretName: {{ include "g11.fullname" . }}-tls-prod
+  renewBefore: {{ .Values.gateway.tls.acme.renewBefore }}
+  commonName: {{ .Values.gateway.hostname }}
+  dnsNames:
+    - {{ .Values.gateway.hostname }}
+  issuerRef:
+    name: letsencrypt-prod
+    kind: {{ .Values.gateway.tls.acme.issuerKind }}
+{{- end }}
 {{- end }}

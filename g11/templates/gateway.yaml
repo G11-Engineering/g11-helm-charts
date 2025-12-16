@@ -22,5 +22,5 @@ spec:
         - {{ .Values.gateway.hostname }}
       tls:
         mode: SIMPLE
-        credentialName: {{ include "g11.fullname" . }}-tls
+        credentialName: {{ if .Values.gateway.tls.acme.useStaging }}{{ include "g11.fullname" . }}-tls-staging{{ else }}{{ include "g11.fullname" . }}-tls-prod{{ end }}
     {{- end }}
