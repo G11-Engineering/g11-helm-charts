@@ -14,7 +14,7 @@ spec:
     helm:
       parameters:
         - name: gateway.hostname
-          value: demostg.jasonmishi.com
+          value: stg.jasonmishi.com
   destination:
     server: https://kubernetes.default.svc
     namespace: g11-stg
