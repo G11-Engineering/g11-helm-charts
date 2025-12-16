@@ -8,6 +8,7 @@ gateway:
   hostname: '"*"'
   tls:
     enabled: true
+    gatewayNamespace: istio-system  # Namespace where the TLS secret will be created
     secretName: argocd-tls
     acme:
       enabled: true
