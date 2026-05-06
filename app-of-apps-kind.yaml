@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-of-apps-kind
+  namespace: argocd
+spec:
+  project: default
+  source:
+    # Update repoURL / targetRevision if you are demoing from a fork or a branch.
+    repoURL: https://github.com/G11-Engineering/g11-helm-charts
+    targetRevision: kind-demo-argocd
+    path: argo-apps-kind
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

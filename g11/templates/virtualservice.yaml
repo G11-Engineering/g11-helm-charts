@@ -22,12 +22,12 @@ spec:
   - name: primary
     route:
     - destination:
-        host: frontend
+        host: {{ include "g11.serviceFQDN" (dict "service" "frontend" "context" .) }}
         port:
           number: 3000
       weight: 100
     - destination:
-        host: frontend-canary
+        host: {{ include "g11.serviceFQDN" (dict "service" "frontend-canary" "context" .) }}
         port:
           number: 3000
       weight: 0

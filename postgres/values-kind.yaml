@@ -1,0 +1,14 @@
+# Local demo values for kind + Argo CD.
+# kind's default storage class is typically "standard"; reuse it instead of the AWS EFS class.
+storageClass:
+  create: false
+
+instances:
+  dataVolume:
+    storageClassName: standard
+
+backups:
+  pgbackrest:
+    repos:
+      dataVolume:
+        storageClassName: standard

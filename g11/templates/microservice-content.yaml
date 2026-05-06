@@ -114,17 +114,17 @@ metadata:
   name: content-internal
 spec:
   hosts:
-  - content
+  - {{ include "g11.serviceFQDN" (dict "service" "content" "context" .) }}
   http:
   - name: primary
     route:
     - destination:
-        host: content
+        host: {{ include "g11.serviceFQDN" (dict "service" "content" "context" .) }}
         port:
           number: 3002
       weight: 100
     - destination:
-        host: content-canary
+        host: {{ include "g11.serviceFQDN" (dict "service" "content-canary" "context" .) }}
         port:
           number: 3002
       weight: 0

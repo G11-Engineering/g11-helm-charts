@@ -112,17 +112,17 @@ metadata:
   name: category-internal
 spec:
   hosts:
-  - category
+  - {{ include "g11.serviceFQDN" (dict "service" "category" "context" .) }}
   http:
   - name: primary
     route:
     - destination:
-        host: category
+        host: {{ include "g11.serviceFQDN" (dict "service" "category" "context" .) }}
         port:
           number: 3004
       weight: 100
     - destination:
-        host: category-canary
+        host: {{ include "g11.serviceFQDN" (dict "service" "category-canary" "context" .) }}
         port:
           number: 3004
       weight: 0

@@ -1,0 +1,22 @@
+# Local demo values for kind + Argo CD.
+# This keeps the application deployable without cert-manager or sealed-secrets.
+postgres:
+  clusterName: hippo-postgres
+
+secrets:
+  useSealed: false
+  jwtSecret: demo-jwt-secret-change-me
+  asgardeo:
+    orgName: g11engineering
+    clientId: demo-client-id
+    clientSecret: demo-client-secret
+    m2mClientId: demo-m2m-client-id
+    m2mClientSecret: demo-m2m-client-secret
+    issuer: https://api.asgardeo.io/t/g11engineering/oauth2/token
+
+gateway:
+  hostname: g11.127.0.0.1.nip.io
+  tls:
+    enabled: false
+    acme:
+      enabled: false

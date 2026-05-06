@@ -124,17 +124,17 @@ metadata:
   name: user-internal
 spec:
   hosts:
-  - user
+  - {{ include "g11.serviceFQDN" (dict "service" "user" "context" .) }}
   http:
   - name: primary
     route:
     - destination:
-        host: user
+        host: {{ include "g11.serviceFQDN" (dict "service" "user" "context" .) }}
         port:
           number: 3001
       weight: 100
     - destination:
-        host: user-canary
+        host: {{ include "g11.serviceFQDN" (dict "service" "user-canary" "context" .) }}
         port:
           number: 3001
       weight: 0

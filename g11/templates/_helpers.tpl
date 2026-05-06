@@ -60,3 +60,10 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Return the fully qualified DNS name for a namespaced Service.
+*/}}
+{{- define "g11.serviceFQDN" -}}
+{{- printf "%s.%s.svc.cluster.local" .service .context.Release.Namespace -}}
+{{- end }}

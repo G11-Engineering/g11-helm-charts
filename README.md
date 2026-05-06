@@ -95,6 +95,265 @@ For manual cluster setup, ensure the following are installed and configured:
 
 ---
 
+## 💻 Local Demo On Ubuntu With kind
+
+This repository now includes a local demo path that is separate from the production and staging ArgoCD applications:
+
+- `app-of-apps-kind.yaml`
+- `argo-apps-kind/g11-kind-postgres.yaml`
+- `argo-apps-kind/g11-kind.yaml`
+- `g11/values-kind.yaml`
+- `postgres/values-kind.yaml`
+- `nonhelmhelpers/kind-config.yaml`
+- `nonhelmhelpers/istio-profile.yml`
+
+### What The Local Demo Needs
+
+For the local demo, you do **not** need cert-manager or Sealed Secrets because the `values-kind.yaml` files disable those production-specific parts.
+
+You **do** need these controllers and components in the cluster:
+
+- Istio using `nonhelmhelpers/istio-profile.yml`
+- Argo CD
+- Argo Rollouts
+- Crunchy Data PostgreSQL Operator
+- Metrics Server
+
+### 1. Install The Required Tools On Ubuntu
+
+Install base packages and Docker:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl git gnupg jq
+
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo usermod -aG docker "$USER"
+newgrp docker
+docker version
+```
+
+Install `kubectl`:
+
+```bash
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/kubectl
+kubectl version --client
+```
+
+Install `kind`:
+
+```bash
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.31.0/kind-linux-amd64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+kind version
+```
+
+Install `helm`:
+
+```bash
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+helm version
+```
+
+Install `istioctl`:
+
+```bash
+curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.28.1 sh -
+sudo install -m 0755 istio-1.28.1/bin/istioctl /usr/local/bin/istioctl
+istioctl version
+```
+
+Install the Argo CD CLI if you want it:
+
+```bash
+curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+sudo install -m 0555 argocd /usr/local/bin/argocd
+argocd version --client
+```
+
+### 2. Create The kind Cluster
+
+Use the included kind config so the Istio ingress NodePorts from `nonhelmhelpers/istio-profile.yml` are reachable on the host:
+
+```bash
+kind create cluster --name g11 --config nonhelmhelpers/kind-config.yaml
+kubectl cluster-info --context kind-g11
+kubectl config use-context kind-g11
+```
+
+If you need to recreate it:
+
+```bash
+kind delete cluster --name g11
+```
+
+### 3. Install Istio Using The Repo Profile
+
+This repository expects Istio, and for local work you should use the included profile file because it enables the ingress gateway, fixed NodePorts, Istio CNI, and the settings this repo was built around:
+
+```bash
+istioctl install -f nonhelmhelpers/istio-profile.yml -y
+kubectl get pods -n istio-system
+```
+
+### 4. Create And Label The Namespaces Before Installing Argo CD Or The Apps
+
+The `g11` chart enforces strict mTLS, and the rollout health checks depend on Istio-aware traffic inside the mesh. Create the namespaces first and label them for sidecar injection:
+
+```bash
+kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
+kubectl label namespace argocd istio-injection=enabled --overwrite
+
+kubectl create namespace g11-kind --dry-run=client -o yaml | kubectl apply -f -
+kubectl label namespace g11-kind istio-injection=enabled --overwrite
+```
+
+### 5. Install The Cluster Dependencies
+
+Install Argo CD with Helm instead of the raw `install.yaml` manifest. This avoids CRD annotation size issues on newer clusters and keeps the install path aligned with CRD best practices:
+
+```bash
+helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update
+helm upgrade --install argocd argo/argo-cd \
+  -n argocd \
+  --set configs.params.server.insecure=true
+kubectl rollout status deployment/argocd-server -n argocd --timeout=180s
+```
+
+Install Argo Rollouts into the same namespace so the rollout controller is also part of the mesh:
+
+```bash
+helm upgrade --install argo-rollouts argo/argo-rollouts -n argocd
+kubectl rollout status deployment/argo-rollouts -n argocd
+```
+
+Install Metrics Server:
+
+```bash
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl patch deployment metrics-server -n kube-system --type='json' \
+  -p='[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+kubectl rollout status deployment/metrics-server -n kube-system
+```
+
+Install the Crunchy Data PostgreSQL Operator. This chart uses the `PostgresCluster` CRD, so the operator must be installed before Argo CD syncs the `postgres` chart:
+
+```bash
+kubectl create namespace postgres-operator --dry-run=client -o yaml | kubectl apply -f -
+kubectl apply --server-side -k "github.com/CrunchyData/postgres-operator/config/default?ref=v6.0.1"
+kubectl rollout status deployment/pgo -n postgres-operator --timeout=180s
+```
+
+### 6. Prepare The Git Source That Argo CD Will Sync From
+
+Argo CD does not sync from your uncommitted working tree. Commit and push the local demo files to a branch in a Git repository Argo CD can read.
+
+If you are not using this repository's `main` branch directly, update:
+
+- `app-of-apps-kind.yaml`
+- `argo-apps-kind/g11-kind-postgres.yaml`
+- `argo-apps-kind/g11-kind.yaml`
+
+Set `repoURL` and `targetRevision` to your fork and branch.
+
+### 7. Set Up Argo CD Against The Cluster
+
+You can do this either by applying the parent application YAML directly or by creating the parent application in the Argo CD UI.
+
+#### Option A: Apply The Parent Application YAML
+
+```bash
+kubectl apply -f app-of-apps-kind.yaml
+kubectl get applications -n argocd
+```
+
+Expected applications:
+
+- `app-of-apps-kind`
+- `g11-kind-postgres`
+- `g11-kind`
+
+#### Option B: Create The Parent Application Through The Argo CD UI
+
+Start a local port-forward and get the initial admin password:
+
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
+```
+
+Then:
+
+1. Open `https://localhost:8080`.
+2. Log in with username `admin` and the password from the command above.
+3. Go to **Applications** and click **NEW APP**.
+4. Set **Application Name** to `app-of-apps-kind`.
+5. Set **Project Name** to `default`.
+6. Set **Sync Policy** to `Automatic` if you want the demo to reconcile itself.
+7. Set **Repository URL** to the Git repo that contains your committed local demo files.
+8. Set **Revision** to the branch you pushed.
+9. Set **Path** to `argo-apps-kind`.
+10. Set **Cluster URL** to `https://kubernetes.default.svc`.
+11. Set **Namespace** to `argocd`.
+12. Create the application and sync it.
+
+After that, Argo CD should create the child applications `g11-kind-postgres` and `g11-kind`.
+
+### 8. Verify The Local Demo
+
+Check that the applications synced and that the workloads came up:
+
+```bash
+kubectl get applications -n argocd
+kubectl get pods -n argocd
+kubectl get pods -n g11-kind
+kubectl get postgrescluster -n g11-kind
+kubectl get rollout -n g11-kind
+```
+
+For local access:
+
+```bash
+# Argo CD UI
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+# Initial Argo CD admin password
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
+
+# Frontend directly
+kubectl port-forward svc/frontend -n g11-kind 3000:3000
+```
+
+Open `https://localhost:8080` in your browser and log in with username `admin` and the password from the command above.
+
+Because `nonhelmhelpers/kind-config.yaml` maps the Istio gateway NodePorts to the host, you can also test the gateway directly on:
+
+- `http://g11.127.0.0.1.nip.io`
+
+Use `g11.127.0.0.1.nip.io` for the demo hostname. Istio 1.28 rejects `localhost` as a Gateway/VirtualService host because it is not an FQDN, so `g11/values-kind.yaml` uses a loopback `nip.io` name instead.
+
+### Local Demo Notes
+
+- The local Postgres application uses Helm release name `hippo-postgres` so that the generated database secret names match `postgres.clusterName`.
+- `g11/values-kind.yaml` disables sealed secrets and TLS/ACME on purpose for local work.
+- If you want the local demo to use real sealed secrets, install Sealed Secrets into the cluster and reseal the secrets against that cluster's public certificate.
+- If OAuth callbacks need to work end-to-end, use a hostname and callback configuration that matches your identity provider setup instead of the placeholder demo secrets.
+- Argo CD syncs from Git, not from your working tree. The `kind` app-of-apps files must exist in the remote branch referenced by `repoURL` and `targetRevision` before the bootstrap application can work.
+
+---
+
 ## 🔄 GitOps Deployment (App-of-Apps Pattern)
 
 > **Recommended Approach**: Use GitOps with ArgoCD for automated deployments.
